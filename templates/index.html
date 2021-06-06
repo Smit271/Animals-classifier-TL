@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Animal Image Classifier</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{{ url_for('static', filename = '/img/Favicon/favicon.png') }}" rel="icon">
+  <!-- <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{ url_for('static', filename = '/vendor/animate.css/animate.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename = '/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename = '/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename = '/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename = '/vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename = '/vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{{ url_for('static', filename = '/css/style.css') }}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Groovin - v4.2.0
+  * Template URL: https://bootstrapmade.com/groovin-free-bootstrap-theme/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <h1 class="logo"><a href="index.html">Classifier</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">What is CNN ?</a></li>
+          <li><a class="nav-link scrollto" href="#services">Implementation</a></li>
+          <li><a class="nav-link scrollto" href="#why-us">What I used?</a></li>
+          <li><a class="nav-link scrollto " href="#portfolio">Images in dataset</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          <li><a class="getstarted scrollto" href="#start">Get Started</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero">
+
+    <div class="hero-container">
+      <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
+
+        <div class="carousel-inner" role="listbox">
+          <!-- Slide 1 -->
+          <div class="carousel-item active" style="background: url(static/img/background/bg.jpg);">
+            <div class="carousel-container">
+              <div class="carousel-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  <strong>{{ message }}</strong>
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                <h2 class="animate__animated animate__fadeInDown">Welcome to Image classifier !</h2>
+                <p class="animate__animated animate__fadeInUp">This is an animal image classifier in which you can input
+                  the image of an animal and model will predict the animal from inputed image.</p>
+
+                <p class="animate__animated animate__fadeInUp">I have built this mini project in my 7<sup>th</sup> sem
+                  of engineering which took 2 weeks to built.</p>
+
+                <p class="animate__animated animate__fadeInUp">To use this classifier scroll down or click <a
+                    class="getstarted scrollto" href="#start">GET STARTED </a></p>
+
+
+                <!-- <div class="file btn btn-lg btn-primary"
+                  style="position: relative; overflow: hidden; background-color: #5c9f24;">
+                  Upload the file
+                  <input type="file" name="file"
+                    style=" position: absolute; font-size: 50px; opacity: 0; right: 0; top: 0;" />
+                </div> -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section><!-- End Hero -->
+
+
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="start" class="about">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Let's predict the Animal !</h2>
+
+          <form class="form" action="{{ url_for('home') }}" enctype="multipart/form-data" method="POST">
+          <div class="row" style="margin-top: 50px;">
+            <div class="col-lg-4" style="text-align: left; font-size: 20px;"><i class="bi bi-caret-right-fill"
+                style="color: #5c9f24;"></i> Upload an image :</div>
+
+            <div class="file btn btn-lg btn-primary col-lg-8"
+              style="position: relative; overflow: hidden; background-color: #5c9f24; width: 15%;">
+              Upload the file
+              <input type="file" name="in_image"
+                style=" position: absolute; font-size: 50px; opacity: 0; right: 0; top: 0;" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 50px;">
+            <div class="col-lg-4" style="text-align: left; font-size: 20px;"><i class="bi bi-caret-right-fill"
+                style="color: #5c9f24;"></i> Click start to run algorithm :</div>
+
+            <button class="btn btn-primary col-lg-8" type="submit" style="width: 15%;">Start</button>
+          </div>
+          </form>
+
+
+        </div>
+      </div>
+    </section><!-- End About Section -->
+
+
+
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container">
+        <div class="section-title">
+          <h2>What is CNN ?</h2>
+
+          <h4 style="margin-bottom: 15px;text-align: left;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i> What is CNN ?</h4>
+
+          <p style="text-align: justify; margin-bottom: 20px;">
+            A Convolutional Neural Network is a Deep Learning algorithm which can take in an input image,
+            assign importance to various objects in the image and be able to
+            differentiate one from the other.
+          </p>
+          <p style="text-align: justify;">
+            The pre-processing required in a CNN is much lower as compared to
+            other classification algorithms. Each input image will pass it through a series of
+            convolution layers. At the end model will predict the image.
+          </p>
+
+          <!-- <div style="margin: 50px;">
+            <img src="assets/img/CNN/CNN flow.jpeg" alt="">
+          </div> -->
+
+
+          <h4 style="margin-bottom: 15px; margin-top: 60px;text-align: left;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i> Why I used CNN ?</h4>
+
+          <p style="text-align: justify; margin-bottom: 5px;">
+            There are some reasons that why I used CNN algorithm not other algorithm.
+          </p>
+
+          <ul style="text-align: left;">
+            <li>CNN has very high accuracy in image recognition problems</li>
+            <li>CNN is more powerful than anyother algorithm like ANN, RNN.</li>
+            <li>CNN required less pre-processing compared to other classification algorithms.</li>
+            <li>CNN can automatically detects the important features wisthout any human supervision.</li>
+          </ul>
+
+        </div>
+      </div>
+    </section><!-- End About Section-->
+
+
+
+
+
+
+
+
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container">
+        <div class="section-title">
+          <h2 style="margin-bottom: 40px;">Implementation</h2>
+
+          <h4 style="margin-bottom: 20px; text-decoration: underline; text-decoration-color: #5c9f24;">Step 1</h4>
+
+          <p style="text-align: justify; margin-bottom: 30px;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i>
+            <b>Downloading the dataset :</b> This is animal image classifier and I have downloaded the <a
+              href="https://www.kaggle.com/alessiocorrado99/animals10">Animal - 10</a> image dataset for my project and
+            I have downloaded it from <a href="https://www.kaggle.com/">kaggle</a>. You can find dataset for your
+            project also.
+          </p>
+
+          <h4 style="margin-bottom: 20px; text-decoration: underline; text-decoration-color: #5c9f24;">Step 2</h4>
+
+          <p style="text-align: justify; margin-bottom: 30px;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i>
+            <b>Importing the libraries :</b> We have to install necessary libraries befort importing them. In this project most
+            important library is Tensorflow.
+          </p>
+
+          <h4 style="margin-bottom: 20px; text-decoration: underline; text-decoration-color: #5c9f24;">Step 3</h4>
+
+          <p style="text-align: justify; margin-bottom: 30px;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i>
+            <b>Pre-processing :</b> Before using the dataset we have to pre-process it. Pre-processing is data mining
+            technique in which raw data is transform into the useful format.
+          </p>
+
+          <h4 style="margin-bottom: 20px; text-decoration: underline; text-decoration-color: #5c9f24;">Step 4</h4>
+
+          <p style="text-align: justify; margin-bottom: 30px;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i>
+            <b>Normalization :</b> Here our Animal - 10 image dataset is normalize on the scale of 0 to 1. Data
+            normalization is part of pre-processing, in which data is minimized.
+          </p>
+
+          <h4 style="margin-bottom: 20px; text-decoration: underline; text-decoration-color: #5c9f24;">Step 5</h4>
+
+          <p style="text-align: justify; margin-bottom: 30px;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i>
+            <b>Training dataset & Validation dataset :</b> In this step our image dataset is splitted into 2 parts.
+          <ol style="text-align: left;">
+            <li>Training dataset : This dataset is used to train the model.</li>
+            <li>Validation dataset : This dataset is used to validate the model.</li>
+          </ol>
+          </p>
+
+          <h4 style="margin-bottom: 20px; text-decoration: underline; text-decoration-color: #5c9f24;">Step 6</h4>
+
+          <p style="text-align: justify; margin-bottom: 30px;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i>
+            <b>Model creation :</b> In this step model architecture is created. In this step I have created different layers of the
+            model.
+          </p>
+
+          <h4 style="margin-bottom: 20px; text-decoration: underline; text-decoration-color: #5c9f24;">Step 7</h4>
+
+          <p style="text-align: justify; margin-bottom: 30px;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i>
+            <b>Traning model :</b> Earlier in step-5 we have splitted the dataset into 2 parts which were Training
+            dataset & Validation dataset. So in this step we will train the model using this Training dataset. Training
+            accuracy of this model is 98.31%.
+          </p>
+
+          <h4 style="margin-bottom: 20px; text-decoration: underline; text-decoration-color: #5c9f24;">Step 8</h4>
+
+          <p style="text-align: justify; margin-bottom: 30px;"><i class="bi bi-caret-right-fill"
+              style="color: #5c9f24;"></i>
+            <b>Validating model :</b> Till now we have trained the model now we have to validate it. To validate the
+            model we will use Validation dataset. Validation accuracy of this model is 95.28%.
+          </p>
+
+        </div>
+      </div>
+    </section>
+    <!-- End Services Section -->
+
+
+
+
+
+    <!-- ======= Why Us Section ======= -->
+    <section id="why-us" class="why-us">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Technologies and Languages</h2>
+          <p>In this section I have mention which technologies and languages I have used to build the project.</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="box">
+              <span>01</span>
+              <h4>HTML</h4>
+              <p>To build the structure of the webpage.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="box">
+              <span>02</span>
+              <h4>CSS</h4>
+              <p>
+                To give good design to the webpage.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="box">
+              <span>03</span>
+              <h4>JavaScript</h4>
+              <p>
+                To make webpage interactive.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 40px;">
+
+          <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="box">
+              <span>04</span>
+              <h4>Bootstrap</h4>
+              <p>To make webpage responsive and to use it's in build classes.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="box">
+              <span>05</span>
+              <h4>Python</h4>
+              <p>To build the CNN model and to predict the animals.</p>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="box">
+              <span>06</span>
+              <h4>Animal - 10 Dataset</h4>
+              <p>To train the model and to validate the model I have used Animal-10 dataset.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End Why Us Section -->
+
+
+
+
+    <!-- ======= Counts Section ======= -->
+    <section id="counts" class="counts">
+      <div class="container">
+
+        <div class="row no-gutters">
+
+          <div style="margin: 15px; font-size: 18px;"><i class="bi bi-caret-right-fill" style="color: #5c9f24;"></i> I
+            have used <a href="https://www.kaggle.com/alessiocorrado99/animals10">Animal - 10</a> dataset to train
+            the model and this dataset consist the pictures of 10 animals and on
+            an average there are more than 1.6k images for each animal.</div>
+
+          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch">
+            <div class="count-box">
+              <i class="bi bi-images"></i>
+              <span data-purecounter-start="0" data-purecounter-end="1666" data-purecounter-duration="1"
+                class="purecounter"></span>
+              <p><strong>Cat</strong> images</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch">
+            <div class="count-box">
+              <i class="bi bi-images"></i>
+              <span data-purecounter-start="0" data-purecounter-end="2623" data-purecounter-duration="1"
+                class="purecounter"></span>
+              <p><strong>Horse</strong> images</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch">
+            <div class="count-box">
+              <i class="bi bi-images"></i>
+              <span data-purecounter-start="0" data-purecounter-end="1820" data-purecounter-duration="1"
+                class="purecounter"></span>
+              <p><strong>Sheep</strong> images</p>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 d-md-flex align-items-md-stretch">
+            <div class="count-box">
+              <i class="bi bi-images"></i>
+              <span data-purecounter-start="0" data-purecounter-end="1866" data-purecounter-duration="1"
+                class="purecounter"></span>
+              <p><strong>Cow</strong> images</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End Counts Section -->
+
+
+
+
+    <!-- ======= Portfolio Section ======= -->
+    <section id="portfolio" class="portfolio">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Animal images in the dataset</h2>
+          <p>Here I have shown the image of the animals that are used in this mini project.</p>
+        </div>
+
+        <!-- DEMO 4 -->
+        <div class="py-5">
+          <!-- <h3 class="font-weight-bold mb-0">Demo 4</h3>
+          <p class="font-italic text-muted mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p> -->
+          <div class="row" style="margin-bottom: 15px;">
+
+            <!-- Dog-->
+            <div class="col-lg-4 mb-3 mb-lg-0" style="margin-bottom: 25px;">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Dog.jpeg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span class="font-weight-light">Dog
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">4.8k images are used</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spider-->
+            <div class="col-lg-4 mb-3 mb-lg-0">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Spider.jpg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span class="font-weight-light">Spider
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">4.7k images are used</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sheep -->
+            <div class="col-lg-4 mb-3 mb-lg-0">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Sheep.jpg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span class="font-weight-light">Sheep
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">1.8k images are used</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row" style="margin-bottom: 15px;">
+
+            <!--Butterfly-->
+            <div class="col-lg-4 mb-3 mb-lg-0" style="margin-bottom: 25px;">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Butterfly.jpg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span
+                      class="font-weight-light">Butterfly
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">1.2k images are used</p>
+                </div>
+              </div>
+            </div>
+
+            <!--Cat-->
+            <div class="col-lg-4 mb-3 mb-lg-0">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Cat.jpeg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span class="font-weight-light">Cat
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">1.6k images are used</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chicken -->
+            <div class="col-lg-4 mb-3 mb-lg-0">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Chicken.jpeg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span class="font-weight-light">Chicken
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">3k images are used</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row" style="margin-bottom: 15px;">
+
+            <!--Cow-->
+            <div class="col-lg-4 mb-3 mb-lg-0" style="margin-bottom: 25px;">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Cow.jpeg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span class="font-weight-light">Cow
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">1.8k images are used</p>
+                </div>
+              </div>
+            </div>
+
+            <!--Horse-->
+            <div class="col-lg-4 mb-3 mb-lg-0">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Horse.jpeg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span class="font-weight-light">Horse
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">2.6k images are used</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Elephant -->
+            <div class="col-lg-4 mb-3 mb-lg-0">
+              <div class="hover hover-4 text-white rounded"><img src="static/img/Use images/Elephant.jpg" alt="">
+                <div class="hover-overlay"></div>
+                <div class="hover-4-content">
+                  <h3 class="hover-4-title text-uppercase font-weight-bold mb-0"><span
+                      class="font-weight-light">Elephant
+                    </span></h3>
+                  <p class="hover-4-description text-uppercase mb-0 small">1.4k images are used</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End Portfolio Section -->
+
+
+
+
+
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Contact</h2>
+          <p>Contact informations are given below.</p>
+        </div>
+
+        <div class="row contact-info">
+
+          <div class="col-md-4">
+            <div class="contact-address">
+              <i class="bi bi-geo-alt"></i>
+              <h3>Address</h3>
+              <address>A3 xyz society, Chandkheda, Ahmedabad.</address>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="contact-phone">
+              <i class="bi bi-phone"></i>
+              <h3>Phone Number</h3>
+              <p><a href="tel:+911234567891">+911234567891</a></p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="contact-email">
+              <i class="bi bi-envelope"></i>
+              <h3>Email</h3>
+              <p><a href="mailto:imgclassifier@gmail.coms">imgclassifier@gmail.com</a></p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form">
+          <form action="#" method="post" role="form" class="php-email-form">
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name"
+                  data-rule="minlen:4" data-msg="Please enter at least 4 chars">
+              </div>
+              <div class="col-md-6 form-group mt-3 mt-md-0">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email"
+                  data-rule="email" data-msg="Please enter a valid email">
+              </div>
+            </div>
+            <div class="form-group mt-3">
+              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+            </div>
+            <div class="form-group mt-3">
+              <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+            </div>
+            <div class="my-3">
+              <div class="loading">Loading</div>
+              <div class="error-message"></div>
+              <div class="sent-message">Your message has been sent. Thank you!</div>
+            </div>
+            <div class="text-center"><button type="submit">Send Message</button></div>
+          </form>
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6">
+            <div class="footer-info">
+              <h3>CLASSIFIER</h3>
+              <p>
+                A3 xyz society<br>
+                Chandkheda, Ahmedabad<br><br>
+                <strong>Phone:</strong> +911234567891<br>
+                <strong>Email:</strong> imgclassifier@gmail.com<br>
+              </p>
+              <div class="social-links mt-3">
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#hero">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#start">Get Started</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#services">Implementation</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#why-us">What I used?</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#portfolio">Images in dataset</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+
+
+          <div class="col-lg-4 col-md-6 footer-newsletter">
+            <h4>Subscribe for more updates!</h4>
+            <form action="#" method="post">
+              <input type="email" name="email"><input type="submit" value="Subscribe">
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>LANCE CHRISTIAN</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/groovin-free-bootstrap-theme/ -->
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{{ url_for('static', filename = '/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename = '/vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ url_for('static', filename = '/vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+  <script src="{{ url_for('static', filename = '/vendor/php-email-form/validate.js') }}"></script>
+  <script src="{{ url_for('static', filename = '/vendor/purecounter/purecounter.js') }}"></script>
+  <script src="{{ url_for('static', filename = '/vendor/swiper/swiper-bundle.min.js') }}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{{ url_for('static', filename = '/js/main.js') }}"></script>
+
+</body>
+
+</html>
